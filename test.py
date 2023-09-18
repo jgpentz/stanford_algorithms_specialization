@@ -1,55 +1,59 @@
-from collections import defaultdict
 import random
-from copy import deepcopy
-from collections import deque
 
-def bfs(g):
-    explored = []
-    explored.append('S')
-    levels = defaultdict(list)
-    level = 0
-    levels[level].append('S')
+def partition(a, l, r):
+    piv_index = random.randrange(l, r)
+    a[l], a[piv_index] = a[piv_index], a[l]
 
-    q = deque()
-    q.append('S')
+    i = l
+    for j in range(l, r):
+        if a[j + 1] < a[l]:
+            a[i + 1], a[j + 1] = a[j + 1], a[i + 1]
+            i += 1
 
-    while q:
-        node = q.popleft()
-        level += 1
-        for adj_node in g[node]:
-            if adj_node not in explored:
-                explored.append(adj_node)
-                q.append(adj_node)
-                levels[level].append(adj_node)
+    a[l], a[i] = a[i], a[l]
 
-    print(levels)
+    return i
 
+def quickselect(a, kth, l, r):
+    if l >= r:
+        return a[l]
+    
+    piv_index = partition(a, l, r)
 
-
-# if __name__ == "__main__":
-#     a = [9, 3, 7, 5, 6, 4, 8, 2, 1, 10]
-#     # print(quicksort(a, 0, len(a) - 1))
-#     for kth in range(1, (len(a) + 1)):
-#         print(quickselect(a, kth, 0, len(a) - 1))
+    if piv_index + 1 == kth:
+        return a[piv_index]
+    elif piv_index + 1 > kth:
+        return quickselect(a, kth, l, piv_index - 1)
+    else:
+        return quickselect(a, kth, piv_index + 1, r)
+    
 
 if __name__ == "__main__":
-    # Graph G:
-    # 
-    #         --- A --- C ----- E
-    #       /          / \     /
-    #     S           /   \   /
-    #      \         /     \ /
-    #       ------- B ----- D 
-    # 
+    a = [9, 3, 7, 5, 6, 4, 8, 2, 1, 10]
+    # print(mergesort(a))
+    # quicksort(a, 0, len(a) - 1)
+    # print(a)
+    for kth in range(1, (len(a) + 1)):
+        print(quickselect(a, kth, 0, len(a) - 1))
 
-    g = {
-        'S': ['A', 'B'],
-        'A': ['S', 'C'],
-        'B': ['S', 'C', 'D'],
-        'C': ['A', 'B', 'D', 'E'],
-        'D': ['B', 'C', 'E'],
-        'E': ['C', 'D']
-    }
+# if __name__ == "__main__":
+#     # Graph G:
+#     # 
+#     #         --- A --- C ----- E
+#     #       /          / \     /
+#     #     S           /   \   /
+#     #      \         /     \ /
+#     #       ------- B ----- D 
+#     # 
 
-    bfs(g)
+#     g = {
+#         'S': ['A', 'B'],
+#         'A': ['S', 'C'],
+#         'B': ['S', 'C', 'D'],
+#         'C': ['A', 'B', 'D', 'E'],
+#         'D': ['B', 'C', 'E'],
+#         'E': ['C', 'D']
+#     }
+
+#     bfs(g)
     
