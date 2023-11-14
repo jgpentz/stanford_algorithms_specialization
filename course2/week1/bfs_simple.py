@@ -1,11 +1,10 @@
 from collections import deque
 
-def bfs(g):
+def bfs(g, s):
     explored = {}
-    level = 0
     queue = deque()
-    queue.append('S')
-    explored['S'] = level
+    queue.append(s)
+    explored[s] = 0
 
     # Pop an item off the queue, search through its' adjacent nodes,
     # If any of the nodes are unexplored, mark it as explored and 
@@ -17,8 +16,8 @@ def bfs(g):
                 explored[node] = explored[current_node] + 1
                 queue.append(node)
 
-    print(max(explored.values()))
     print(explored)
+
           
 
 if __name__ == "__main__":
@@ -40,5 +39,5 @@ if __name__ == "__main__":
         'E': ['C', 'D']
     }
 
-    bfs(g)
+    bfs(g, 'S')
     

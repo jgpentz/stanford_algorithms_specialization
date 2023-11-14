@@ -45,8 +45,6 @@ def dfs1(g, start_node):
 def dfs_loop1(graph_r, max_node):
     for i in range(max_node, 0, -1):
         if i not in explored:
-            global leader
-            leader = i
             dfs1(graph_r, i)
 
 

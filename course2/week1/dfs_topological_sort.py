@@ -1,43 +1,41 @@
-explored = set()
-finishing_times = {}
-current_label = 0
+cur_label = 0 
+explored = {}
+def topo_sort(g):
+    global cur_label
+    cur_label = len(g)
+    for v in g.keys():
+        if v not in explored:
+            dfs_topo(g, v)
 
-def dfs(g, start_node):
-    print(start_node)
-    explored.add(start_node)
-    for edge in g[start_node]:
-        if edge not in explored:
-            dfs(g, edge)
-    
-    # Register the current topological ordering
-    global current_label
-    finishing_times[start_node] = current_label
-    current_label -= 1
+def dfs_topo(g, s):
+    global cur_label
+    explored[s] = float('inf')
+    for v in g[s]:
+        if v not in explored:
+            dfs_topo(g, v)
 
+    explored[s] = cur_label
+    cur_label -= 1
 
 if __name__ == "__main__":
     # Graph G:
     # 
-    #         --> A --> C ----> E
+    #         --> 2 --> 4 ----> 6
     #       /          ^       ^
-    #     S           /       /
+    #     1           /       /
     #      \         /       /
-    #       ------> B ----> D 
+    #       ------> 3 ----> 5
     # 
 
     # Directed acyclic graph
     g = {
-        'S': ['A', 'B'],
-        'A': ['C'],
-        'B': ['C', 'D'],
-        'C': ['E'],
-        'D': ['E'],
-        'E': [],
+        # Component 1
+        1: [2, 3],
+        2: [4],
+        3: [4, 5],
+        4: [6],
+        5: [6],
+        6: [],
     }
-    current_label = len(g)
-
-    for node in g:
-        if node not in explored:
-            dfs(g, node)
-    print(finishing_times)
-    
+    topo_sort(g)
+    print(explored)
