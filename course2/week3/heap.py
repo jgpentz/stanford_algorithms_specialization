@@ -16,10 +16,10 @@ class Heap():
             return
         
         # Bubble up, comparing against parent and swapping if parent < item
-        i = len(self.heap)
+        i = len(self.heap) - 1
         while i > 1:
-            if self.heap[(i // 2) - 1] > self.heap[i - 1]:
-                self.heap[(i // 2) - 1], self.heap[i - 1] = self.heap[i - 1], self.heap[(i // 2) - 1]
+            if self.heap[(i // 2)] > self.heap[i]:
+                self.heap[(i // 2)], self.heap[i] = self.heap[i], self.heap[(i // 2)]
                 i = i // 2
             else:
                 return
@@ -67,6 +67,11 @@ if __name__ == "__main__":
     h.insert(6)
     h.insert(2)
     h.insert(7)
+    h.insert(11)
+    h.insert(13)
+    h.insert(10)
+    h.insert(12)
+    h.insert(9)
     print(h.heap)
     print(h.extract_min())
     print(h.heap)
