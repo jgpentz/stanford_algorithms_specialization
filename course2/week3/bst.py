@@ -1,82 +1,116 @@
-class BSTNode():
-    def __init__(self, val=None):
+class Node():
+    def __init__(self, val):
         self.val = val
         self.left = None
         self.right = None
 
+class BST():
+    def __init__(self):
+        self.root = None
+
     def insert(self, val):
-        '''
-        Checks if this node is a new leaf and sets its' value if so.
-        Otherwise, new value <= this node goes to the left, new value > this
-        node goes to the right. Creates a new node if the left or right is empty.
-        '''
-        if self.val is None:
-            self.val = val
-            return
-        
-        if val <= self.val:
-            if self.left is None:
-                self.left = BSTNode(val)
-            else:
-                self.left.insert(val)
-        else:
-            if self.right is None:
-                self.right = BSTNode(val)
-            else:
-                self.right.insert(val)
+        self.root = self._insert(self.root, val)
+
+    def _insert(self, root, val):
+        if root is None:
+            return Node(val)
+
+        # Val less than root goes to left subtree
+        # Val greater than current root goes to right subtree
+        if val < root.val:
+            root.left = self._insert(root.left, val)
+        elif val > root.val:
+            root.right = self._insert(root.right, val)
+
+        return root
 
     def search(self, val):
-        '''
-        Checks if this nodes value is equal to the 
-        value we're searching for.  If it's not, then recurses
-        on the left or right branches, until it find the value
-        or hits the bottom.
-        '''
-        if val == self.val:
-            return True
+        return self._search(self.root, val)
+
+    def _search(self, root, val):
+        if root is None or root.val == val:
+            return root
         
-        if val < self.val:
-            if self.left == None:
-                return False
-            else:
-                return self.left.search(val)
-        else:
-            if self.right == None:
-                return False
-            else:
-                return self.right.search(val)
+        # Recursively search in left/right subtree
+        if val < root.val:
+            return self._search(root.left, val)
+        elif val > root.val:
+            return self._search(root.right, val)
 
     def min(self):
-        if self.left is None:
-            return self.val
-               
-        return self.left.min()
+        return self._min(self.root)
+
+    def _min(self, root):
+        # Continue down left subtrees until it hits a leaf
+        if root.left is None:
+            return root.val
+        
+        return self._min(root.left)
 
     def max(self):
-        if self.right is None:
-            return self.val
+        return self._max(self.root)
+
+    def _max(self, root):
+        # Continue down right subtrees until it hits a leaf
+        if root.right is None:
+            return root.val
         
-        return self.right.max()
+        return self._max(root.right)
 
-    # def predecessor(self):
+    def delete(self, val):
+        self.root = self._delete(self.root, val)
 
-    # def successor(self):
+    def _delete(self, root, val):
+        if root is None:
+            return None
+        
+        # Search for val by recursing on left/right subtree,
+        # store the child pointer
+        if val < root.val:
+            root.left = self._delete(root.left, val)
+        elif val > root.val:
+            root.right = self._delete(root.right, val)
+        else:
+            # Found val: if val has 0 or 1 children, then return a pointer to it
+            if root.left is None:
+                return root.right
+            if root.right is None:
+                return root.left
+        
+            # val has 2 children, replace with minimum val from right subtree
+            root.val = self._min(root.right)
+            root.right = self._delete(root.right, root.val)
 
-    # def delete(self):
+        return root
 
-if __name__ == "__main__":
-    nodes = [2, 3, 1, 5]
-    bst = BSTNode()
-    for node in nodes:
-        bst.insert(node)
+    def inorder_traversal(self):
+        result = []
+        self._inorder_traversal(self.root, result)
+        return result
 
-    print(bst.val)
-    print(bst.left.val)
-    print(bst.right.val)
-    print(bst.search(1))
-    print(bst.search(2))
-    print(bst.search(6))
-    print(bst.search(3))
-    print(bst.search(5))
-    print(bst.min())
-    print(bst.max())
+    def _inorder_traversal(self, root, result):
+        if root:
+            self._inorder_traversal(root.left, result)
+            result.append(root.val)
+            self._inorder_traversal(root.right, result)
+        
+# Example usage
+bst = BST()
+bst.insert(50)
+bst.insert(30)
+bst.insert(20)
+bst.insert(40)
+bst.insert(70)
+bst.insert(60)
+bst.insert(80)
+
+print("Inorder traversal:", bst.inorder_traversal())
+
+bst.delete(20)
+print("Inorder traversal after deleting 20:", bst.inorder_traversal())
+bst.delete(20)
+search_result = bst.search(40)
+if search_result:
+    print(f"Node with key 40 found in the tree.")
+else:
+    print(f"Node with key 40 not found in the tree.") 
