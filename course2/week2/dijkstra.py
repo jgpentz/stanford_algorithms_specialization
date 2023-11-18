@@ -34,3 +34,39 @@ if __name__ == "__main__":
         't' : []
     }
     djikstras(g, 's')
+
+
+# import heapq
+
+# def dijkstra(graph, start):
+#     # Initialzie distances and predecessors
+#     distances = {vertex: float('inf') for vertex in graph}
+#     predecessors = {vertex: None for vertex in graph}
+#     distances[start] = 0
+
+#     # Create a riority q to store vertices and their distances
+#     pq = [(0, start)]
+
+#     while pq:
+#         # Get the vertex ith the smallest distance, from the priorty queue
+#         curr_distance, curr_vertex = heapq.heappop(pq)
+
+#         # If current distance is larger than known distance, skip
+#         if curr_distance > distances[curr_vertex]:
+#             continue
+
+#         # Explore the neighbors of the current vertex
+#         for neighbor, weight in graph[curr_vertex].items():
+#             distance = distances[curr_vertex] + weight
+
+#             # If this path is shorter than previously known, update the known distance
+#             # store the predecessor, and add this to the heap for processing
+#             # Note: this potentially adds the same vertex to the heap, to avoid this
+#             # consider implementing a heap that allows for updating an existing entry
+#             # in the heap
+#             if distance < distances[neighbor]:
+#                 distances[neighbor] = distance
+#                 predecessors[neighbor] = curr_vertex
+#                 heapq.heappush(pq, (distance, neighbor))
+
+#     return distances, predecessors
