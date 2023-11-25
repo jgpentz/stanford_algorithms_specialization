@@ -1,30 +1,30 @@
 import heapq
 from collections import defaultdict
 
-def mst(graph):
+def prims(graph):
     start = list(graph.keys())[0]
+    mst = defaultdict(dict)
     visited = set()
-    tree = defaultdict(dict)
 
-    pq = [(0, None, start)]
+    pq = [(0, start, None)]
 
     while pq:
-        # Take the smallest edge off the pq
-        curr_weight, head, tail = heapq.heappop(pq)
+        # Take the vertex with the shortest edge out of pw
+        curr_weight, curr_vertex, parent = heapq.heappop(pq)
 
-        # Don't need to look at same vertex twice
-        if tail in visited:
+        if curr_vertex in visited:
             continue
 
-        visited.add(tail)
-        tree[head][tail] = curr_weight
+        visited.add(curr_vertex)
 
-        # Explore the neighbors
-        for neighbor, weight in graph[tail].items():
+        if parent is not None:
+            mst[parent][curr_vertex] = curr_weight
+
+        for neighbor, weight in graph[curr_vertex].items():
             if neighbor not in visited:
-                heapq.heappush(pq, (weight, tail, neighbor))
+                heapq.heappush(pq, (weight, neighbor, curr_vertex))
 
-    return tree
+    return mst
 
 
 # Example usage:
@@ -38,10 +38,5 @@ graph = {
     'G': {'D': 3, 'F': 3, 'H': 4},
     'H': {'F': 6, 'G': 4},
 }
-graph = {
-    'A': {'B': 3, 'C': 5},
-    'B': {'C': 3},
-    'C': {}
-}
-tree = mst(graph)
+tree = prims(graph)
 print(tree)
