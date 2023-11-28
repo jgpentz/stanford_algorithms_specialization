@@ -18,7 +18,6 @@ def bfs(g, s):
 
     print(explored)
 
-          
 
 if __name__ == "__main__":
     # Graph G:
