@@ -26,7 +26,6 @@ class Node():
     def __init__(self, key, weight):
         self.key = key
         self.weight = weight
-        self.depth = 0
         self.left = None
         self.right = None
 
@@ -54,10 +53,6 @@ class Huffman():
                         merged_nodes.append(combo_queue.popleft())
 
             self.root = Node(None, (merged_nodes[0].weight + merged_nodes[1].weight))
-            if merged_nodes[0].depth > merged_nodes[1].depth:
-                self.root.depth = merged_nodes[0].depth + 1
-            else:
-                self.root.depth = merged_nodes[1].depth + 1
             self.root.left = merged_nodes[0]
             self.root.right = merged_nodes[1]
 
@@ -65,6 +60,7 @@ class Huffman():
 
     def max_depth(self):
         return self._max_depth(self.root)
+
     def _max_depth(self, root):
         if root == None:
             return 0
