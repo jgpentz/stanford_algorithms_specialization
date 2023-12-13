@@ -35,24 +35,14 @@ def build_implications(clauses):
     adj = defaultdict(list)
     adj_t = defaultdict(list)
 
-    # Note: the silly if (cond): pass statements are there so that sink
-    # vertices exist as a key in the graphs
     for clause in clauses:
         # Normal implciation graph
         adj[-1 * clause[0]].append(clause[1])
-        if adj[clause[1]]:
-            pass
         adj[-1 * clause[1]].append(clause[0])
-        if adj[clause[0]]:
-            pass
 
         # Reversed implication graph
         adj_t[clause[1]].append(-1 * clause[0])
-        if adj_t[-1 * clause[0]]:
-            pass
         adj_t[clause[0]].append(-1 * clause[1])
-        if adj_t[-1 * clause[1]]:
-            pass
 
     return adj, adj_t
 
@@ -65,9 +55,13 @@ def dfs1(g, s):
     global finishing_times
 
     explored.add(s)
-    for v in g[s]:
-        if v not in explored:
-            dfs1(g, v)
+
+    # Note: Need to check if s is in g because the next line will create
+    # a new entry in the defaultdict if the key isn't present
+    if s in g:
+        for v in g[s]:
+            if v not in explored:
+                dfs1(g, v)
 
     finishing_times.append(s)
 
@@ -118,7 +112,7 @@ def solve_2sat():
     '''
     global scc
 
-    for k, v in scc.items():
+    for k, _ in scc.items():
         if scc[k] == scc[-1 * k]:
             return False
     
